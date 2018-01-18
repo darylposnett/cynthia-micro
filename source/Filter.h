@@ -5,18 +5,29 @@
 class Filter
 {
 public:
+	Filter()
+	{
+		SetResonance(0.);
+	}
+
 	// accomodate for sample rate and convert from frequency to 0.0 - 1.0
-	void SetSampleRate(double sr) { cutoffMultiplier = 44100.0 / sr / 20000.0; }
-	void SetSmoothing(double r) { smoothing = r; }
+	void SetSampleRate(double sr) { cutoffMultiplier = 2 / sr; }
+	void SetResonance(double r)
+	{
+		q = 1 - r;
+		scale = sqrt(q);
+	}
 
 	double Process(double input, double cutoff);
 
 private:
 	double cutoffMultiplier = 0.0;
-	double f = 1.0;
-	double smoothing = 0.0;
 
-	double velocity = 0.0;
-	double value = 0.0;
+	double f;
+	double q;
+	double scale;
+
+	double low = 0.0;
+	double band = 0.0;
 };
 
